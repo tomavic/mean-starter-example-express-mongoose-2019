@@ -42,7 +42,7 @@ exports.new = function(req, res) {
 
 // Handle view request info
 exports.view = function(req, res) {
-  Request.findById(req.params.contact_id, function(err, request) {
+  Request.findById(req.params.request_id, function(err, request) {
     if (err) res.send(err);
     res.json({
       message: "Request details loading..",
@@ -75,7 +75,7 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
   Request.remove(
     {
-      _id: req.params.contact_id
+      _id: req.params.request_id
     },
     function(err, request) {
       if (err) res.send(err);

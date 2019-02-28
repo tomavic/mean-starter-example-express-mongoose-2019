@@ -25,7 +25,10 @@ let userSchema = new Schema({
         type: String,
         required: true
     },
-    role: String,
+    role: {
+        type: String,
+        default: 'normal'
+    },
     create_date: {
         type: Date,
         default: Date.now

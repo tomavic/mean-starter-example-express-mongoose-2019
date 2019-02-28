@@ -26,30 +26,31 @@ exports.list = function(req, res) {
 
 // Handle create request actions
 exports.signup = function(req, res) {
-  var request = new User();
-  request.title = req.body.name ? req.body.name : request.name;
-  request.gender = req.body.gender;
-  request.email = req.body.email;
-  request.phone = req.body.phone;
+  var user = new User();
+  user.first_name = req.body.first_name;
+  user.last_name = req.body.last_name;
+  user.email = req.body.email;
+  user.mobile = req.body.mobile;
+  user.password = req.body.password;
 
-  // save the request and check for errors
-  request.save(function(err) {
+  // save the user and check for errors
+  user.save(function(err) {
     if (err) res.json(err);
     res.json({
-      message: "New request created!",
-      data: request
+      message: "New user created!",
+      data: user
     });
   });
 };
 
 
-// Handle view request info
+// Handle view user info
 exports.view = function(req, res) {
-  User.findById(req.params.contact_id, function(err, request) {
+  User.findById(req.params.user_id, function(err, user) {
     if (err) res.send(err);
     res.json({
-      message: "User details loading..",
-      data: request
+      status: "success",
+      data: user
     });
   });
 };
@@ -60,10 +61,11 @@ exports.view = function(req, res) {
 exports.update = function(req, res) {
   User.findById(req.params.contact_id, function(err, request) {
     if (err) res.send(err);
-    request.name = req.body.name ? req.body.name : request.name;
-    request.gender = req.body.gender;
-    request.email = req.body.email;
-    request.phone = req.body.phone;
+    user.first_name = req.body.first_name;
+    user.last_name = req.body.last_name;
+    user.email = req.body.email;
+    user.mobile = req.body.mobile;
+    user.password = req.body.password;
 
     // save the request and check for errors
     request.save(function(err) {
@@ -80,11 +82,7 @@ exports.update = function(req, res) {
 // Handle delete request
 // TODO: Admin authority
 exports.delete = function(req, res) {
-  User.remove(
-    {
-      _id: req.params.contact_id
-    },
-    function(err, request) {
+  User.remove({_id: req.params.user_id}, function(err, request) {
       if (err) res.send(err);
       res.json({
         status: "success",
