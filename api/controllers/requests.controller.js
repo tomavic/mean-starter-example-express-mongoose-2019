@@ -54,7 +54,7 @@ exports.view = function(req, res) {
 
 // Handle update request info
 exports.update = function(req, res) {
-  Request.findById(req.params.contact_id, function(err, request) {
+  Request.findById(req.params.request_id, function(err, request) {
     if (err) res.send(err);
     request.title = req.body.title;
     request.description = req.body.description;

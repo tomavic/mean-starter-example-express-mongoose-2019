@@ -9,7 +9,10 @@ const User = require("../models/User.model");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
-  res.send(user);
+  res.json({
+    status: 'success',
+    token: user
+  });
 });
 
 router.post("/auth", async (req, res) => {
