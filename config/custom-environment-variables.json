@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "walaben5af",
+  "DB": "mongodb://localhost/resthub"
+}
