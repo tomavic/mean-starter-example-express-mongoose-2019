@@ -1,4 +1,5 @@
 {
   "jwtPrivateKey": "walaben5af",
-  "DB": "mongodb://localhost/resthub"
+  "DB": "mongodb://localhost/resthub",
+  "liveDB": "mongodb+srv://tomas:tomas@admin19@cluster0-liccb.mongodb.net/test?retryWrites=true"
 }
