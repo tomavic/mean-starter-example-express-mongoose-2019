@@ -3,13 +3,21 @@
  * @file requests.controller.js
  */
 let Request = require("../models/Request.model");
-const Joi = require('joi');
-const _ = require('lodash');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+
 
 // Handle index actions
 exports.index = async function(req, res) {
+  const token = req.header('x-auth-token');
+  const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
+  const creatorId = decoded._id; 
 
-  let requests = await Request.find().select('title').populate('publisher');
+  let requests = await Request.find()
+                              .populate('creatorId', 'name')
+                              .where('creatorId').equals(creatorId)
+                              // .select('title')
+                              ;
     res.json({
       status: "success",
       message: "Requests retrieved successfully",
@@ -33,9 +41,18 @@ exports.index = async function(req, res) {
 
 // Handle create request actions
 exports.new = function(req, res) {
+  // TODO:
+  const token = req.header('x-auth-token');
+  const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
+  const creatorId = decoded._id; 
+  console.log(".... creatorId ", creatorId);
+
+
   var request = new Request();
   request.title = req.body.title;
   request.description = req.body.description;
+  request.creatorId = creatorId;
+
 
   // save the request and check for errors
   request.save(function(err) {
