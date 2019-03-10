@@ -3,23 +3,31 @@
  * @file requests.controller.js
  */
 let Request = require("../models/Request.model");
-
+const Joi = require('joi');
+const _ = require('lodash');
 
 // Handle index actions
-exports.index = function(req, res) {
-  Request.get(function(err, requests) {
-    if (err) {
-      res.json({
-        status: "error",
-        message: err
-      });
-    }
+exports.index = async function(req, res) {
+
+  let requests = await Request.find().select('title').populate('publisher');
     res.json({
       status: "success",
       message: "Requests retrieved successfully",
       data: requests
     });
-  });
+  // Request.get(function(err, requests) {
+  //   if (err) {
+  //     res.json({
+  //       status: "error",
+  //       message: err
+  //     });
+  //   }
+  //   res.json({
+  //     status: "success",
+  //     message: "Requests retrieved successfully",
+  //     data: requests
+  //   });
+  // });
 };
 
 

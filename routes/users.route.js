@@ -1,7 +1,7 @@
 // api-routes.js
 // Initialize express router
 const router = require("express").Router();
-const auth = require("../../middleware/auth");
+const auth = require("../middleware/auth");
 const Joi = require('joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
@@ -75,17 +75,15 @@ function validateUser(user) {
       .max(255)
       .required()
   };
-
   return Joi.validate(user, schema);
 }
 
-function validateLogin(req) {
+function validateLogin(user) {
     const schema = {
       email: Joi.string().min(5).max(255).required().email(),
       password: Joi.string().min(5).max(255).required()
     };
-  
-    return Joi.validate(req, schema);
+    return Joi.validate(user, schema);
   }
 
 // Export API routes

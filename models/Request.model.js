@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 // Setup schema
 let requestSchema = new Schema({
+    creatorId: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     title: {
         type: String,
         required: true
