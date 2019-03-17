@@ -42,7 +42,7 @@ app.use('/api/user', userRoutes);
 
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
+mongoose.connect("mongodb://boy:44eSydrtMsb7zArx@pm-shard-00-00-liccb.mongodb.net:27017,pm-shard-00-01-liccb.mongodb.net:27017,pm-shard-00-02-liccb.mongodb.net:27017/test?ssl=true&replicaSet=PM-shard-0&authSource=admin&retryWrites=true", { useNewUrlParser: true })
   .then(() => {
     console.log(config.get('DB'));
     console.log('Database is connected ');
