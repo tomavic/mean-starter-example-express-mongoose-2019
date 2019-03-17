@@ -27,7 +27,10 @@ let userSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    isAdmin: Boolean
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 userSchema.methods.generateAuthToken = function() { 

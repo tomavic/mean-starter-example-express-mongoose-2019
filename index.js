@@ -29,9 +29,7 @@ app.use(cors());
 app.use(logger('dev'));
 
 
-
 // Use Api routes in the App
-app.use('/', (req, res) => res.send('Hola from Tomas!'));
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 

@@ -11,7 +11,7 @@ router.get('/', auth, requestController.index);
 router.post('/', auth, requestController.new);
 router.get('/:request_id', auth, requestController.view);
 router.put('/:request_id', auth, requestController.update);
-router.delete('/:request_id', [auth, admin], requestController.delete);
+router.delete('/:request_id', auth, requestController.delete);
 
 // Export API routes
 module.exports = router;

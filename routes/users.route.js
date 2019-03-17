@@ -11,11 +11,11 @@ router.post("/register", userController.register);
 router.get("/me", auth, userController.me);
 router.put("/update", auth, userController.update);
 
-/****************************************************
- * Admin 
- *****************************************************/
+/**********************
+ *      Admin 
+ *********************/
 router.get("/all", [auth, admin], userController.list);
-router.delete('/delete', [auth, admin], userController.delete);
+router.delete('/delete/:user_id', [auth, admin], userController.delete);
 
 // Export API routes
 module.exports = router;

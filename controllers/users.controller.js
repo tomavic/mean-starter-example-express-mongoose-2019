@@ -21,6 +21,7 @@ exports.login = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.body.email });
+  let _user = await User.findOne({ email: req.body.email }).select("-password");
   if (!user) return res.status(400).send("Invalid email or password.");
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -29,7 +30,8 @@ exports.login = async (req, res) => {
   const token = user.generateAuthToken();
   res.json({
     status: 'success',
-    token: token
+    token: token,
+    user: _user
   });
 }
 
@@ -56,7 +58,7 @@ exports.register = async (req, res) => {
   res.json({
     status: 'success',
     token: token,
-    data: _.pick(user, ["_id", "name", "email"])
+    data: _.pick(user, ["_id", "name", "email", "role", "isAdmin", "create_date"])
   });
 }
 
@@ -66,7 +68,7 @@ exports.list = async(req, res) => {
     status: 'success',
     users: users
   });
-};
+}
 
 exports.update = async (req, res) => {
 
@@ -85,16 +87,16 @@ exports.update = async (req, res) => {
     data: user
   });
 
-};
+}
 
 exports.delete = async (req, res) => {
-  const user = await User.findByIdAndRemove(req.user._id);
+  const user = await User.findByIdAndRemove(req.params.user_id);
   if (!user) return res.status(404).send('The user with the given ID was not found.');
   res.json({
     status: "success",
     message: "User deleted"
   });
-};
+}
 
 
 function validateUser(user) {
