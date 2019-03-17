@@ -1,9 +1,9 @@
 // DB.js
-const username = 'tomas';
-const password = 'tomas%40admin19';
+const username = 'boy';
+const password = '44eSydrtMsb7zArx';
 
 
 module.exports = {
   DB: `mongodb://localhost/resthub`,
-  liveDB: `mongodb+srv://tomas:tomas@admin19@cluster0-liccb.mongodb.net/test?retryWrites=true`
+  liveDB: `mongodb://boy:44eSydrtMsb7zArx@pm-shard-00-00-liccb.mongodb.net:27017,pm-shard-00-01-liccb.mongodb.net:27017,pm-shard-00-02-liccb.mongodb.net:27017/test?ssl=true&replicaSet=PM-shard-0&authSource=admin&retryWrites=true`
 };
