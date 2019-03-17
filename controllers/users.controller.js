@@ -2,92 +2,124 @@
  * @author TOMAS
  * @file users.controller.js
  */
-let User = require("../models/User.model");
+const Joi = require('joi');
+const _ = require('lodash');
+const bcrypt = require('bcrypt');
+const User = require("../models/User.model");
 
 
-// Handle index actions
-// TODO: Admin authority
-exports.list = function(req, res) {
-  User.get(function(err, users) {
-    if (err) {
-      res.json({
-        status: "error",
-        message: err
-      });
-    }
-    res.json({
-      status: "success",
-      message: "Users retrieved successfully",
-      data: users
-    });
+exports.me = async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  res.json({
+    status: 'success',
+    user: user
+  });
+}
+
+exports.login = async (req, res) => {
+  const { error } = validateLogin(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Invalid email or password.");
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword) return res.status(400).send("Invalid email or password.");
+
+  const token = user.generateAuthToken();
+  res.json({
+    status: 'success',
+    token: token
+  });
+}
+
+exports.register = async (req, res) => {
+  const { error } = validateUser(req.body);
+  if (error) return res.status(400).json({
+    status: 'fail',
+    reason: error.details[0].message
+  });
+
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).json({
+    status: 'fail',
+    reason: 'User already registered.'
+  });
+
+  user = new User(_.pick(req.body, ["name", "email", "password"]));
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+  await user.save();
+
+  const token = user.generateAuthToken();
+  // res.header("x-auth-token", token).send(_.pick(user, ["_id", "name", "email"]));
+  res.json({
+    status: 'success',
+    token: token,
+    data: _.pick(user, ["_id", "name", "email"])
+  });
+}
+
+exports.list = async(req, res) => {
+  const users = await User.find().sort('name');
+  res.json({
+    status: 'success',
+    users: users
+  });
+};
+
+exports.update = async (req, res) => {
+
+  const user = await User.findByIdAndUpdate(req.user._id, { 
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    mobile: req.body.mobile,
+    password: req.body.password,
+  }, { new: true });
+
+  if (!user) return res.status(404).json('The user with the given ID was not found.');
+
+  res.json({
+    message: "User Info updated",
+    data: user
+  });
+
+};
+
+exports.delete = async (req, res) => {
+  const user = await User.findByIdAndRemove(req.user._id);
+  if (!user) return res.status(404).send('The user with the given ID was not found.');
+  res.json({
+    status: "success",
+    message: "User deleted"
   });
 };
 
 
-// Handle create request actions
-exports.signup = function(req, res) {
-  var user = new User();
-  user.first_name = req.body.first_name;
-  user.last_name = req.body.last_name;
-  user.email = req.body.email;
-  user.mobile = req.body.mobile;
-  user.password = req.body.password;
+function validateUser(user) {
+  const schema = {
+    name: Joi.string()
+      .min(5)
+      .max(50)
+      .required(),
+    email: Joi.string()
+      .min(5)
+      .max(255)
+      .required()
+      .email(),
+    password: Joi.string()
+      .min(5)
+      .max(255)
+      .required()
+  };
+  return Joi.validate(user, schema);
+}
 
-  // save the user and check for errors
-  user.save(function(err) {
-    if (err) res.json(err);
-    res.json({
-      message: "New user created!",
-      data: user
-    });
-  });
-};
-
-
-// Handle view user info
-exports.view = function(req, res) {
-  User.findById(req.params.user_id, function(err, user) {
-    if (err) res.send(err);
-    res.json({
-      status: "success",
-      data: user
-    });
-  });
-};
-
-
-// Handle update request info
-// TODO: Admin authority along with Normal User
-exports.update = function(req, res) {
-  User.findById(req.params.contact_id, function(err, request) {
-    if (err) res.send(err);
-    user.first_name = req.body.first_name;
-    user.last_name = req.body.last_name;
-    user.email = req.body.email;
-    user.mobile = req.body.mobile;
-    user.password = req.body.password;
-
-    // save the request and check for errors
-    request.save(function(err) {
-      if (err) res.json(err);
-      res.json({
-        message: "User Info updated",
-        data: request
-      });
-    });
-  });
-};
-
-
-// Handle delete request
-// TODO: Admin authority
-exports.delete = function(req, res) {
-  User.remove({_id: req.params.user_id}, function(err, request) {
-      if (err) res.send(err);
-      res.json({
-        status: "success",
-        message: "User deleted"
-      });
-    }
-  );
-};
+function validateLogin(user) {
+  const schema = {
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required()
+  };
+  return Joi.validate(user, schema);
+}

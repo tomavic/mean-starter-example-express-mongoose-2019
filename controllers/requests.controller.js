@@ -8,7 +8,7 @@ const config = require('config');
 
 
 // Handle index actions
-exports.index = async function(req, res) {
+exports.index = async (req, res) => {
   const token = req.header('x-auth-token');
   const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
   const creatorId = decoded._id; 
@@ -23,19 +23,7 @@ exports.index = async function(req, res) {
       message: "Requests retrieved successfully",
       data: requests
     });
-  // Request.get(function(err, requests) {
-  //   if (err) {
-  //     res.json({
-  //       status: "error",
-  //       message: err
-  //     });
-  //   }
-  //   res.json({
-  //     status: "success",
-  //     message: "Requests retrieved successfully",
-  //     data: requests
-  //   });
-  // });
+
 };
 
 

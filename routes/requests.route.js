@@ -7,7 +7,6 @@ const admin = require("../middleware/admin");
 
 
 // Request routes
-
 router.get('/', auth, requestController.index);
 router.post('/', auth, requestController.new);
 router.get('/:request_id', auth, requestController.view);

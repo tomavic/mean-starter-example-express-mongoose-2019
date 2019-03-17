@@ -1,8 +1,6 @@
 
 const express = require('express');
 const config = require('config');
-const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
 const app = express();
 const requestsRoutes = require('./routes/requests.route');
 const userRoutes = require('./routes/users.route');
@@ -10,10 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const logger = require('morgan');
-const fs = require('fs');
-const path = require('path');
-const db = mongoose.connection;
-const port = process.env.PORT || 5000;
+
 
 
 if (!config.get('jwtPrivateKey')) {
@@ -36,6 +31,7 @@ app.use(logger('dev'));
 
 
 // Use Api routes in the App
+app.use('/', (req, res) => res.send('Hola from Tomas!'));
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 
@@ -52,16 +48,9 @@ mongoose.connect(config.get('DB'), { useNewUrlParser: true })
     }
   );
 
+const port = process.env.PORT || 5000;
+const server = app.listen(port, () => console.info(`Listening on port ${port}...`));
 
 
-// Send message for default URL
-app.get('/', (req, res) => res.send('Hola from Tomas!'));
-
-
-// Launch app to listen to specified port
-app.listen(port, function () {
-  console.log("Running RestHub on port " + port);
-});
-
-
+module.exports = server;
 
