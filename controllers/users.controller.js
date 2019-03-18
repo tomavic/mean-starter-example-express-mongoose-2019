@@ -73,11 +73,8 @@ exports.list = async(req, res) => {
 exports.update = async (req, res) => {
 
   const user = await User.findByIdAndUpdate(req.user._id, { 
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
+    name: req.body.name,
     email: req.body.email,
-    mobile: req.body.mobile,
-    password: req.body.password,
   }, { new: true });
 
   if (!user) return res.status(404).json('The user with the given ID was not found.');
