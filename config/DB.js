@@ -1,6 +1,6 @@
 // DB.js
 const username = 'boy';
-const password = '44eSydrtMsb7zArx';
+const password = 'hn9MmEUHgLNmUVU6';
 
 
 module.exports = {
