@@ -1,6 +1,7 @@
 
 const express = require('express');
 const config = require('config');
+const path = require('path');
 const app = express();
 const requestsRoutes = require('./routes/requests.route');
 const userRoutes = require('./routes/users.route');
@@ -30,10 +31,16 @@ app.use(logger('dev'));
 
 
 // Use Api routes in the App
+app.use(express.static(path.join(__dirname, 'public/dist/permit-entry')));
+app.use('/', (req, res) => {
+
+})
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 
-
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/dist/permit-entry/index.html'));
+});
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
 mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
