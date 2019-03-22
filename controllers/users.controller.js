@@ -18,7 +18,10 @@ exports.me = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { error } = validateLogin(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).json({
+    status: 'fail',
+    reason: error.details[0].message
+  });
 
   let user = await User.findOne({ email: req.body.email });
   let _user = await User.findOne({ email: req.body.email }).select("-password");
