@@ -36,12 +36,10 @@ app.use('/api/user', userRoutes);
 
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('DB'), { useNewUrlParser: true })
+mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
   .then(() => {
-    console.log(config.get('DB'));
     console.log('Database is connected ');
   }, err => {
-      console.log(config.get('DB'));
       console.log('Can not connect to the database ', err);
     }
   );
