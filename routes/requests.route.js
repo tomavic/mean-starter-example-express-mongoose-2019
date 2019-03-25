@@ -3,7 +3,6 @@
 const router = require('express').Router();
 const requestController = require('../controllers/requests.controller');
 const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
 
 
 // Request routes
