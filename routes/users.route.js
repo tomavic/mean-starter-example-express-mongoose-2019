@@ -9,7 +9,7 @@ router.post("/auth", userController.login);
 router.post("/register", userController.register);
 
 router.get("/me", auth, userController.me);
-router.put("/update", auth, userController.update);
+router.put("/update/:user_id", auth, userController.update);
 
 /**********************
  *      Admin 

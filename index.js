@@ -32,9 +32,6 @@ app.use(logger('dev'));
 
 // Use Api routes in the App
 app.use(express.static(path.join(__dirname, 'public/dist/permit-entry')));
-app.use('/', (req, res) => {
-
-})
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 
@@ -43,7 +40,7 @@ app.get('*', (req, res) => {
 });
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
+mongoose.connect(config.get('DB'), { useNewUrlParser: true })
   .then(() => {
     console.log('Database is connected ');
   }, err => {

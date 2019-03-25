@@ -75,9 +75,15 @@ exports.list = async(req, res) => {
 
 exports.update = async (req, res) => {
 
-  const user = await User.findByIdAndUpdate(req.user._id, { 
+  const { error } = validate(req.body);
+  if (error) return res.status(400).json({
+    status: 'fail',
+    reason: error.details[0].message
+  });
+
+  const user = await User.findByIdAndUpdate(req.params.user_id, { 
     name: req.body.name,
-    email: req.body.email,
+    // email: req.body.email,
   }, { new: true });
 
   if (!user) return res.status(404).json('The user with the given ID was not found.');
@@ -124,6 +130,21 @@ function validateLogin(user) {
   const schema = {
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required()
+  };
+  return Joi.validate(user, schema);
+}
+
+function validate(user) {
+  const schema = {
+    name: Joi.string()
+      .min(5)
+      .max(50)
+      .required(),
+    // email: Joi.string()
+    //   .min(5)
+    //   .max(255)
+    //   .required()
+    //   .email()
   };
   return Joi.validate(user, schema);
 }
