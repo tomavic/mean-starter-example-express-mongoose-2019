@@ -5,7 +5,9 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node index",
-    "dev": "nodemon index"
+    "front": "npm run --prefix public start",
+    "back": "nodemon index",
+    "dev": "concurrently --kill-others \"npm run back\" \"npm run front\""
   },
   "keywords": [],
   "author": "",
@@ -24,5 +26,8 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
   }
 }
