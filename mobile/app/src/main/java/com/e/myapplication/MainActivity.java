@@ -1,5 +1,6 @@
 package com.e.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     String mystring = "Hola";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -19,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), mystring, Toast.LENGTH_LONG).show();
+//              Toast.makeText(getApplicationContext(), mystring, Toast.LENGTH_LONG).show();
+
+              Intent intent = new Intent(MainActivity.this, Login.class);
+              startActivity(intent);
             }
         });
     }
