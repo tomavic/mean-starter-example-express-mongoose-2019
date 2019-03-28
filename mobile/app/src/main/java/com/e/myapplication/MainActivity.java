@@ -9,16 +9,21 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    protected Button myButton;
-    String mystring = "Hola";
+    protected Button myButtonLogin;
+    protected Button myButtonSignup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme.);
+//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myButton = findViewById(R.id.button_login);
-        myButton.setOnClickListener(new View.OnClickListener() {
+      myButtonLogin = findViewById(R.id.button_login);
+      myButtonSignup = findViewById(R.id.button_signup);
+
+
+
+      myButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //              Toast.makeText(getApplicationContext(), mystring, Toast.LENGTH_LONG).show();
@@ -27,5 +32,14 @@ public class MainActivity extends AppCompatActivity {
               startActivity(intent);
             }
         });
+
+
+      myButtonSignup.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(MainActivity.this, Signup.class);
+          startActivity(intent);
+        }
+      });
     }
 }

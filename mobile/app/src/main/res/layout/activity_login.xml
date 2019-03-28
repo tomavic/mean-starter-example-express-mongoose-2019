@@ -39,7 +39,7 @@
     app:layout_constraintTop_toBottomOf="@+id/emailInput" />
 
   <Button
-    android:id="@+id/button"
+    android:id="@+id/button_login"
     style="@style/Widget.AppCompat.Button.Colored"
     android:layout_width="202dp"
     android:layout_height="wrap_content"
