@@ -120,7 +120,7 @@ function validateUser(user) {
       .min(5)
       .max(255)
       .required(),
-    isAdmin: Joi.bool()
+    isAdmin: Joi.number()
       .required()
   };
   return Joi.validate(user, schema);
