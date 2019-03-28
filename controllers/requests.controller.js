@@ -103,6 +103,26 @@ exports.change = function(req, res) {
   });
 };
 
+exports.cancel = function(req, res) {
+  Request.findById(req.params.request_id, function(err, request) {
+    if (err) res.send(err);
+    request.title = req.body.title;
+    request.description = req.body.description;
+    request.status = "cancelled";
+    request.reason = req.body.reason;
+
+    // save the request and check for errors
+    request.save(function(err) {
+      if (err) res.json(err);
+      res.json({
+        message: "Request Info changed",
+        data: request
+      });
+    });
+  });
+};
+
+
 
 // Handle delete request
 exports.delete = function(req, res) {
