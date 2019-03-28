@@ -3,6 +3,7 @@
 const router = require('express').Router();
 const requestController = require('../controllers/requests.controller');
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 
 
 // Request routes
@@ -11,6 +12,12 @@ router.post('/', auth, requestController.new);
 router.get('/:request_id', auth, requestController.view);
 router.put('/:request_id', auth, requestController.update);
 router.delete('/:request_id', auth, requestController.delete);
+
+
+/**********************
+ *      Admin 
+ *********************/
+router.put('/change/:request_id', [auth, admin], requestController.change);
 
 // Export API routes
 module.exports = router;
