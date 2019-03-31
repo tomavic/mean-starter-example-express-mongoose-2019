@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import {NgbPaginationModule, NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Permit Entry';
+
+  constructor() {
+
+  }
 }

@@ -61,12 +61,12 @@ exports.register = async (req, res) => {
   res.json({
     status: 'success',
     token: token,
-    data: _.pick(user, ["_id", "name", "email", "role", "isAdmin", "create_date"])
+    data: _.pick(user, ["_id", "name", "email", "isAdmin", "create_date"])
   });
 }
 
 exports.list = async(req, res) => {
-  const users = await User.find().sort('name');
+  const users = await User.find().sort('name').select("-password");;
   res.json({
     status: 'success',
     users: users
@@ -84,7 +84,7 @@ exports.update = async (req, res) => {
   const user = await User.findByIdAndUpdate(req.params.user_id, { 
     name: req.body.name,
     // email: req.body.email,
-  }, { new: true });
+  }, { new: false });
 
   if (!user) return res.status(404).json('The user with the given ID was not found.');
 
