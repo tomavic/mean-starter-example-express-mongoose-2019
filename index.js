@@ -31,16 +31,16 @@ app.use(logger('dev'));
 
 
 // Use Api routes in the App
-app.use(express.static(path.join(__dirname, 'public/dist/permit-entry')));
+app.use(express.static(path.join(__dirname, 'public/dist/enigma-labs')));
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/dist/permit-entry/index.html'));
+  res.sendFile(path.join(__dirname, 'public/dist/enigma-labs/index.html'));
 });
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('DB'), { useNewUrlParser: true })
+mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
   .then(() => {
     console.log('Database is connected ');
   }, err => {
