@@ -26,39 +26,44 @@ exports.index = async (req, res) => {
 
 };
 
-
-// Handle create request actions
-exports.new = function(req, res) {
-  // TODO:
-  const token = req.header('x-auth-token');
-  const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
-  const creatorId = decoded._id; 
-  console.log(".... creatorId ", creatorId);
-
-
-  var request = new Request();
-  request.title = req.body.title;
-  request.description = req.body.description;
-  request.creatorId = creatorId;
-
-
-  // save the request and check for errors
-  request.save(function(err) {
-    if (err) res.json(err);
+// Handle view request info
+exports.view = function(req, res) {
+  Request.findById(req.params.request_id, function(err, request) {
+    if (err) res.json({
+      message: err.message,
+      status: 'fail'
+    });
     res.json({
-      message: "New request created!",
+      status: 'success',
       data: request
     });
   });
 };
 
 
-// Handle view request info
-exports.view = function(req, res) {
-  Request.findById(req.params.request_id, function(err, request) {
-    if (err) res.send(err);
+// Handle create request actions
+exports.new = function(req, res) {
+  // TODO:
+  const token = req.header('x-auth-token');
+  const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
+  const creatorId = decoded._id;
+
+  var request = new Request();
+  request.title = req.body.title;
+  request.description = req.body.description;
+  request.visit_date = req.body.visit_date;
+  request.reject_reason = '';
+  request.creatorId = creatorId;
+
+
+  // save the request and check for errors
+  request.save(function(err) {
+    if (err) res.json({
+      message: err.message,
+      status: 'fail'
+    });
     res.json({
-      message: "Request details loading..",
+      status: 'success',
       data: request
     });
   });
@@ -69,53 +74,44 @@ exports.view = function(req, res) {
 exports.update = function(req, res) {
   Request.findById(req.params.request_id, function(err, request) {
     if (err) res.send(err);
-    request.title = req.body.title;
-    request.description = req.body.description;
+    request.title = req.body.title || request.title;
+    request.description = req.body.description || request.description;
+    request.visit_date = req.body.visit_date || request.visit_date;
+    request.reject_reason = request.reject_reason;
 
     // save the request and check for errors
     request.save(function(err) {
-      if (err) res.json(err);
+      if (err) res.json({
+        message: err.message,
+        status: 'fail'
+      });
       res.json({
-        message: "Request Info updated",
+        status: 'success',
         data: request
       });
     });
   });
 };
 
-// Handle change request info
-exports.change = function(req, res) {
-  Request.findById(req.params.request_id, function(err, request) {
-    if (err) res.send(err);
-    request.title = req.body.title;
-    request.description = req.body.description;
-    request.status = req.body.status;
-    request.reason = req.body.reason;
 
-    // save the request and check for errors
-    request.save(function(err) {
-      if (err) res.json(err);
-      res.json({
-        message: "Request Info changed",
-        data: request
-      });
-    });
-  });
-};
 
 exports.cancel = function(req, res) {
   Request.findById(req.params.request_id, function(err, request) {
-    if (err) res.send(err);
-    request.title = req.body.title;
-    request.description = req.body.description;
+    if (err) res.json({
+      message: err.message,
+      status: 'fail'
+    });
     request.status = "cancelled";
-    request.reason = req.body.reason;
+    request.reject_reason = req.body.reject_reason;
 
     // save the request and check for errors
     request.save(function(err) {
-      if (err) res.json(err);
+      if (err) res.json({
+        message: err.message,
+        status: 'fail'
+      });
       res.json({
-        message: "Request Info changed",
+        status: 'success',
         data: request
       });
     });
@@ -126,16 +122,45 @@ exports.cancel = function(req, res) {
 
 // Handle delete request
 exports.delete = function(req, res) {
-  Request.remove(
-    {
-      _id: req.params.request_id
-    },
-    function(err, request) {
-      if (err) res.send(err);
+  Request.remove({_id: req.params.request_id}, function(err, request) {
+      if (err) res.json({
+        message: err.message,
+        status: 'fail'
+      });
       res.json({
         status: "success",
         message: "Request deleted"
       });
     }
   );
+};
+
+
+
+// Handle change request info
+exports.change = function(req, res) {
+  Request.findById(req.params.request_id, function(err, request) {
+    if (err) res.json({
+      message: err.message,
+      status: 'fail'
+    });
+
+    request.title = req.body.title || request.title;
+    request.description = req.body.description || request.description;
+    request.visit_date = req.body.visit_date || request.visit_date;
+    request.reject_reason = req.body.reject_reason || request.reject_reason;
+    request.status = req.body.status || request.status;
+
+    // save the request and check for errors
+    request.save(function(err) {
+      if (err) res.json({
+        message: err.message,
+        status: 'fail'
+      });
+      res.json({
+        status: 'success',
+        data: request
+      });
+    });
+  });
 };

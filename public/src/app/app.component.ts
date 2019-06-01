@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import {NgbPaginationModule, NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'enigma-labs';
+  title = 'Permit Entry';
 
-  constructor(private http: HttpClient) {
+  constructor() {
 
-  }
-  sayHello() {
-    this.http.post('http://localhost:5000/auth', {}).subscribe(res => console.log(res))
   }
 }

@@ -28,6 +28,7 @@
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0"
   }
 }

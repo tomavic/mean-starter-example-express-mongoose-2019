@@ -10,9 +10,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const logger = require('morgan');
 
+const localDB = config.get('DB')
+const liveDB =  config.get('liveDB');
+const JWT_PRIVATE_KEY =  config.get('jwtPrivateKey');
+
+const activeDBURI = localDB;
 
 
-if (!config.get('jwtPrivateKey')) {
+if (!JWT_PRIVATE_KEY) {
   console.error('FATAL ERROR: jwtPrivateKey is not defined.');
   process.exit(1);
 }
@@ -31,16 +36,19 @@ app.use(logger('dev'));
 
 
 // Use Api routes in the App
-app.use(express.static(path.join(__dirname, 'public/dist/enigma-labs')));
 app.use('/api/requests', requestsRoutes);
 app.use('/api/user', userRoutes);
 
+
+app.use(express.static(path.join(__dirname, 'public/dist/permit-entry')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/dist/enigma-labs/index.html'));
 });
+
+
 // Connect to Mongoose and set connection variable
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('liveDB'), { useNewUrlParser: true })
+mongoose.connect(activeDBURI, { useNewUrlParser: true })
   .then(() => {
     console.log('Database is connected ');
   }, err => {

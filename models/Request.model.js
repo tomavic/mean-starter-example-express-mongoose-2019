@@ -18,6 +18,10 @@ let requestSchema = new Schema({
         type: String,
         required: true
     },
+    visit_date: {
+        type: Date,
+        required: true
+    },
     created_at: {
         type: Date,
         default: Date.now
@@ -26,7 +30,10 @@ let requestSchema = new Schema({
         type: String,
         default: "Pending"
     },
-    reason: String,
+    reject_reason: {
+        type: String,
+        required: true
+    },
 });
 
 
